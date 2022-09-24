@@ -1,19 +1,21 @@
 from flask import Flask
 from flask_cors import CORS
 from dal import Dal
+import json
+
+#TODO logic for the deletion upon expiration 
 
 app = Flask(__name__)
-cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
 db = Dal()
+
 
 @app.route('/getAllPosts', methods=['GET'])
 def getAllPosts():
-    return  db.getAllPosts()
+    return  json.dumps(db.getAllPosts())
 
 @app.route('/createPost', methods=['POST'])
 def createPost(coordinates):
-    return db.createPost(coordinates.get('lat'),coordinates.get('lng'))
+    return db.createPost(coordinates.get('lat'),coordinates.get('lon'))
 
 
 @app.route('/<postId>/addItem', methods=['POST'])
@@ -24,6 +26,4 @@ def addItem(postId, itemName, itemDescription):
 def deleteItem(itemId):
     return 1
 
-createPost({'lat':2,"lng":1})
-addItem(1,"item name", "sddsdasdfigasufgsaufva")
-    # print(getAllPosts())    
+db.closeCon()
