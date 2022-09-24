@@ -1,28 +1,18 @@
 from flask import Flask
+from dal import Dal
 
+#TODO logic for the deletion upon expiration 
 app = Flask(__name__)
+db = Dal()
+
 
 @app.route('/getAllPosts', methods=['GET'])
 def getAllPosts():
-    return  {
-        'posts': [
-            {   
-                'id' : 1,
-                'createdAt' : 00000000,
-                'coordinates' : "222.22, 221.22",
-                'items' : [
-                    {
-                        'itemName' : "testName",
-                        'itemId' : 1,
-                        'postId' : 1
-                    }
-                ] 
-            }
-    ]}
+    return  db.getAllPosts()
 
 @app.route('/createPost', methods=['POST'])
-def createPost():
-    return 1
+def createPost(coordinates):
+    return db.createPost(coordinates.get('lat'),coordinates.get('lon'))
 
 
 @app.route('/<postId>/addItem, addItem', methods=['POST'])
@@ -32,3 +22,8 @@ def addItem(postId):
 @app.route('/<itemId>/deleteItem', methods=['DELETE'])
 def deleteItem(itemId):
     return 1
+
+
+id = createPost({'lat':2,"lon":1})
+id = createPost({'lat':3,"lon":4})
+print(getAllPosts())
