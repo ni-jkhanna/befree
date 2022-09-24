@@ -4,7 +4,7 @@ from dal import Dal
 import json
 
 #TODO logic for the deletion upon expiration 
-
+#TODO prefill test data
 app = Flask(__name__)
 db = Dal()
 
@@ -24,6 +24,8 @@ def addItem(postId, itemName, itemDescription):
 
 @app.route('/<itemId>/deleteItem', methods=['DELETE'])
 def deleteItem(itemId):
-    return 1
+    #TODO if we deleted the last one, delete the post
+    return db.deleteItem(itemId)
 
-db.closeCon()
+
+
