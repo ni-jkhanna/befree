@@ -1,9 +1,11 @@
-import { AppBar, Toolbar } from "@mui/material";
+import { AppBar, Toolbar, Typography } from "@mui/material";
 
 const TopAppBar = () => {
   return (
     <AppBar position="static">
-      <Toolbar>BeFree</Toolbar>
+      <Toolbar>
+        <Typography>BeFree</Typography>
+      </Toolbar>
     </AppBar>
   );
 };

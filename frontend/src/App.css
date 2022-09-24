@@ -36,7 +36,3 @@
     transform: rotate(360deg);
   }
 }
-
-.post-item:nth-child(odd) {
-  background-color: #4c4c4c;
-}

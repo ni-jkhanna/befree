@@ -1,19 +1,41 @@
-import { Box, Card, CardContent, CardHeader } from "@mui/material";
+import { Box, Paper } from "@mui/material";
+import { ELEVATION } from "../../constants";
+import theme from "../../theme";
 import { Post } from "../../types";
 import PostItem from "./PostItem";
+import { Coordiantes } from "./../../types";
 
-const PostContainer = ({ post }: { post: Post }) => {
+const sx = {
+  ".post-item:nth-child(even)": {
+    "background-color": theme.palette.divider,
+  },
+};
+
+interface ExisitingPostProps {
+  post: Post;
+  coordinates: undefined;
+}
+
+interface NewPostProps {
+  post: undefined;
+  coordinates: Coordiantes;
+}
+
+const PostContainer = ({
+  post,
+  coordinates,
+}: ExisitingPostProps | NewPostProps) => {
+  console.log(post);
   return (
-    <Card>
-      <CardHeader>Items at Post: {post.id}</CardHeader>
-      <CardContent>
-        <Box className={"post-item-list"}>
+    <Paper elevation={ELEVATION}>
+      {post && (
+        <Box sx={sx}>
           {post.items.map((item) => (
-            <PostItem key={item.itemId} item={item} />
+            <PostItem key={item.item_id} item={item} />
           ))}
         </Box>
-      </CardContent>
-    </Card>
+      )}
+    </Paper>
   );
 };
 

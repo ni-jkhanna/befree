@@ -1,7 +1,7 @@
 export interface Item {
-  itemId: number;
-  itemName: string;
-  postId: number;
+  item_id: number;
+  item_name: string;
+  item_description: string;
 }
 
 export interface Post {
@@ -10,4 +10,9 @@ export interface Post {
   lat: number;
   lng: number;
   items: Item[];
+}
+
+export interface Coordiantes {
+  lat: number;
+  lng: number;
 }

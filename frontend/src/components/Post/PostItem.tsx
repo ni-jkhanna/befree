@@ -11,12 +11,12 @@ const PostItem = ({ item }: { item: Item }) => {
       className={"post-item"}
       padding={4}
     >
-      <Box marginY="auto">{item.itemName}</Box>
+      <Box marginY="auto">{item.item_name}</Box>
       <Stack spacing={2}>
         <Button
           variant="contained"
           color="error"
-          onClick={() => removeItemFromPost(item.itemId)}
+          onClick={() => removeItemFromPost(item.item_id)}
         >
           Remove
         </Button>

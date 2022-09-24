@@ -1,5 +1,6 @@
 import {
   createContext,
+  Dispatch,
   PropsWithChildren,
   useCallback,
   useContext,
@@ -14,11 +15,15 @@ interface Context {
   posts: Post[];
   loading: boolean;
   removeItemFromPost: (itemId: number) => void;
+  darkModeOn: boolean;
+  setDarkModeOn: Dispatch<boolean>;
 }
 const PostsContext = createContext<Context>({
   posts: [],
   loading: false,
   removeItemFromPost: (itemId) => {},
+  darkModeOn: true,
+  setDarkModeOn: (state) => {},
 });
 
 const URL = "http://localhost:5000";
@@ -27,19 +32,24 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  const loadPosts = useCallback(() => {
     setLoading(true);
     axios
       .get(`${URL}/getAllPosts`)
       .then((res) => {
+        console.log(res)
         setLoading(false);
-        setPosts(res.data.posts);
+        setPosts(res.data);
       })
       .catch((err) => {
         setLoading(false);
         console.log(err);
       });
   }, []);
+
+  useEffect(() => {
+    loadPosts();
+  }, [loadPosts]);
 
   const removeItemFromPost = useCallback((itemId: number) => {
     axios
@@ -50,25 +60,31 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
       .catch((err) => console.log(err));
   }, []);
 
+  const [darkModeOn, setDarkModeOn] = useState(true);
+
   const value = useMemo(
     () => ({
-      posts: [
-        {
-          id: 1,
-          lat: 52.4936,
-          lng: 13.4469,
-          items: [
-            { itemName: "Baby Clothes", postId: 1, itemId: 1 },
-            { itemName: "Kid Clothes", postId: 1, itemId: 2 },
-            { itemName: "Men clothes", postId: 1, itemId: 3 },
-          ],
-        },
-      ] as Post[],
+      // posts: [
+      //   {
+      //     id: 2,
+      //     lat: 52.4936,
+      //     lng: 13.4469,
+      //     items: [
+      //       { itemName: "Baby Clothes", postId: 1, itemId: 1 },
+      //       { itemName: "Kid Clothes", postId: 1, itemId: 2 },
+      //       { itemName: "Men clothes", postId: 1, itemId: 3 },
+      //     ],
+      //   },
+      // ] as Post[],
+      posts,
       loading,
       removeItemFromPost,
+      darkModeOn,
+      setDarkModeOn,
     }),
-    [loading, posts]
+    [darkModeOn, loading, posts, removeItemFromPost]
   );
+
   return (
     <PostsContext.Provider value={value}>{children}</PostsContext.Provider>
   );

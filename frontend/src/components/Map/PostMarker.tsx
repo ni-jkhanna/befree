@@ -32,17 +32,19 @@ const PostMarker = ({
   post: Post;
   setSelectedPost: Dispatch<Post | undefined>;
 }) => {
-  const markerIcon = useMemo(() => getIconColor(post.createdAt), []);
+  const markerIcon = useMemo(
+    () => getIconColor(post.createdAt),
+    [post.createdAt]
+  );
 
   return (
     // @ts-ignore
     <Marker
-      title={"hello"}
       position={{ lat: post.lat, lng: post.lng }}
       icon={markerIcon}
       onClick={() => {
+        console.log(post);
         setSelectedPost(post);
-        console.log("clicked");
       }}
     />
   );
