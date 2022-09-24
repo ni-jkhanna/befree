@@ -1,13 +1,10 @@
-import React, { Dispatch, useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import PostMarker from "./PostMarker";
 import { usePosts } from "../../contexts/PostsContext";
-import { Coordiantes, Post } from "../../types";
 import { lightMapStyles, darkMapStyles } from "./mapStyles";
 import { Paper } from "@mui/material";
 import { ELEVATION } from "../../constants";
-import NewPostMarker from "./NewPostMarker";
-import { createPostfix } from "typescript";
 
 const containerStyle = {
   // width: "400px",
@@ -19,12 +16,8 @@ const center = {
   lng: 13.4469,
 };
 
-const Map = ({
-  setSelectedPost,
-}: {
-  setSelectedPost: Dispatch<Post | undefined>;
-}) => {
-  const { posts, darkModeOn, createPost } = usePosts();
+const Map = () => {
+  const { posts, darkModeOn, createPost, setSelectedPost } = usePosts();
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyAgKHxqZNOWnkknLpfP_k5GjsxTB88lrUY",
@@ -78,13 +71,7 @@ const Map = ({
         {/* Child components, such as markers, info windows, etc. */}
 
         {posts.map((post) => {
-          return (
-            <PostMarker
-              key={post.post_id}
-              post={post}
-              setSelectedPost={setSelectedPost}
-            />
-          );
+          return <PostMarker key={post.post_id} post={post} />;
         })}
       </GoogleMap>
     </Paper>

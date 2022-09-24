@@ -1,6 +1,7 @@
 import { Marker } from "@react-google-maps/api";
-import { Dispatch, useMemo } from "react";
+import { useMemo } from "react";
 import { Post } from "../../types";
+import { usePosts } from "./../../contexts/PostsContext";
 
 const ICON_COLORS = ["teal", "green", "yellow", "red"];
 
@@ -8,6 +9,7 @@ const getIconColor = (postTimestamp: number) => {
   // TODO: compare timestamp to current time
   // if brand new
   const color = (postTimestamp: number) => {
+    console.log(postTimestamp);
     if (true) {
       return ICON_COLORS[0];
     }
@@ -25,13 +27,8 @@ const getIconColor = (postTimestamp: number) => {
   return `${process.env.PUBLIC_URL}/small_marker_${color(postTimestamp)}.png`;
 };
 
-const PostMarker = ({
-  post,
-  setSelectedPost,
-}: {
-  post: Post;
-  setSelectedPost: Dispatch<Post | undefined>;
-}) => {
+const PostMarker = ({ post }: { post: Post }) => {
+  const { setSelectedPost } = usePosts();
   const markerIcon = useMemo(
     () => getIconColor(post.created_at),
     [post.created_at]

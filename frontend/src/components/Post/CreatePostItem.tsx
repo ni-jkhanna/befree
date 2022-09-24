@@ -1,4 +1,4 @@
-import { Stack, Box, Button, TextField } from "@mui/material";
+import { Stack, Button, TextField } from "@mui/material";
 import { useCallback, useState } from "react";
 import { usePosts } from "./../../contexts/PostsContext";
 
@@ -29,30 +29,31 @@ const CreatePostItem = ({ postId }: { postId: number }) => {
   return (
     <Stack
       direction={"row"}
-      justifyContent={"space-between"}
-      className={"post-item"}
+      marginY="auto"
+      spacing={2}
+      width={"100%"}
       padding={4}
+      className={"post-item"}
     >
-      <Box marginY="auto">
-        <TextField
-          id="filled-basic"
-          label="Name"
-          variant="filled"
-          value={itemName}
-          onChange={(e) => {
-            setItemName(e.target.value);
-          }}
-        />
-        <TextField
-          id="filled-basic"
-          label="Description"
-          variant="filled"
-          value={itemDescription}
-          onChange={(e) => {
-            setItemDescription(e.target.value);
-          }}
-        />
-      </Box>
+      <TextField
+        id="filled-basic"
+        label="Name"
+        variant="filled"
+        value={itemName}
+        onChange={(e) => {
+          setItemName(e.target.value);
+        }}
+      />
+      <TextField
+        sx={{ width: "100%" }}
+        id="filled-basic"
+        label="Description"
+        variant="filled"
+        value={itemDescription}
+        onChange={(e) => {
+          setItemDescription(e.target.value);
+        }}
+      />
       <Button variant="contained" onClick={handleClick}>
         Add
       </Button>

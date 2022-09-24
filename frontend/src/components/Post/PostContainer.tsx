@@ -3,7 +3,6 @@ import { ELEVATION } from "../../constants";
 import theme from "../../theme";
 import { Post } from "../../types";
 import PostItem from "./PostItem";
-import { Coordiantes } from "./../../types";
 import CreatePostItem from "./CreatePostItem";
 
 const sx = {

@@ -1,4 +1,4 @@
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import { Item } from "../../types";
 import { usePosts } from "../../contexts/PostsContext";
 
@@ -11,7 +11,11 @@ const PostItem = ({ item }: { item: Item }) => {
       className={"post-item"}
       padding={4}
     >
-      <Box marginY="auto">{item.item_name}</Box>
+      <Box marginY="auto">
+        <Typography>
+          {item.item_name}: {item.item_description}
+        </Typography>
+      </Box>
       <Stack spacing={2}>
         <Button
           variant="contained"

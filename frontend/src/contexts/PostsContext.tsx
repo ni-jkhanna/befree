@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 import axios from "axios";
-import { Item, Post } from "../types";
+import { Post } from "../types";
 
 interface Context {
   posts: Post[];
@@ -29,6 +29,8 @@ interface Context {
       itemDescription: string;
     }
   ) => void;
+  selectedPost: Post | undefined;
+  setSelectedPost: Dispatch<Post | undefined>;
 }
 const PostsContext = createContext<Context>({
   posts: [],
@@ -38,6 +40,8 @@ const PostsContext = createContext<Context>({
   setDarkModeOn: (state) => {},
   createPost: (lat, lng, callback) => {},
   addItemToPost: (postId, item) => {},
+  selectedPost: undefined,
+  setSelectedPost: (post) => {},
 });
 
 const URL = "http://localhost:5000";
@@ -107,6 +111,7 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
     },
     [loadPosts]
   );
+  const [selectedPost, setSelectedPost] = useState<Post | undefined>(undefined);
 
   const [darkModeOn, setDarkModeOn] = useState(true);
 
@@ -131,8 +136,18 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
       setDarkModeOn,
       createPost,
       addItemToPost,
+      selectedPost,
+      setSelectedPost,
     }),
-    [createPost, darkModeOn, loading, posts, removeItemFromPost]
+    [
+      addItemToPost,
+      createPost,
+      darkModeOn,
+      loading,
+      posts,
+      removeItemFromPost,
+      selectedPost,
+    ]
   );
 
   return (
