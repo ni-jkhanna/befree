@@ -7,6 +7,7 @@ export interface Item {
 export interface Post {
   id: number;
   createdAt: number;
-  coordinates: string;
+  lat: number;
+  lng: number;
   items: Item[];
 }

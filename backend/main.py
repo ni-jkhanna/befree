@@ -1,12 +1,18 @@
 from flask import Flask
 from flask_cors import CORS
+from data import create_test_data
 from dal import Dal
 import json
 import time
 
+
 TTL_POST = 2#days
+
 app = Flask(__name__)
 db = Dal()
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+create_test_data()
 
 
 @app.route('/getAllPosts', methods=['GET'])
@@ -15,9 +21,12 @@ def getAllPosts():
 
 @app.route('/createPost', methods=['POST'])
 def createPost(coordinates):
-    id = db.createPost(coordinates.get('lat'),coordinates.get('lon'))
+    id = db.createPost(coordinates.get('lat'),coordinates.get('lng'))
     cleanExpiredPosts()
     return id
+
+
+
 
 
 @app.route('/<postId>/addItem', methods=['POST'])

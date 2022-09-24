@@ -1,17 +1,25 @@
-import React, { useCallback, useState } from "react";
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import React, { Dispatch, useCallback, useState } from "react";
+import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
+import PostMarker from "./PostMarker";
+import { usePosts } from "../../contexts/PostsContext";
+import { Post } from "../../types";
 
 const containerStyle = {
-  width: "400px",
+  // width: "400px",
   height: "400px",
 };
 
 const center = {
-  lat: -3.745,
-  lng: -38.523,
+  lat: 52.4936,
+  lng: 13.4469,
 };
 
-const Map = () => {
+const Map = ({
+  setSelectedPost,
+}: {
+  setSelectedPost: Dispatch<Post | undefined>;
+}) => {
+  const { posts } = usePosts();
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyAgKHxqZNOWnkknLpfP_k5GjsxTB88lrUY",
@@ -29,17 +37,28 @@ const Map = () => {
     setMap(null);
   }, []);
 
+  console.log(posts);
+
   return isLoaded ? (
     // @ts-ignore
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
-      zoom={10}
+      zoom={12}
       onLoad={onLoad}
       onUnmount={onUnmount}
     >
       {/* Child components, such as markers, info windows, etc. */}
-      <></>
+
+      {posts.map((post) => {
+        return (
+          <PostMarker
+            key={post.id}
+            post={post}
+            setSelectedPost={setSelectedPost}
+          />
+        );
+      })}
     </GoogleMap>
   ) : (
     <></>

@@ -18,23 +18,24 @@ class Dal:
         cur = self.con.cursor()
         posts = []
         output  = cur.execute("SELECT * FROM posts")
+        posts = []
         for post in output:
-            items_res = cur.execute(f"SELECT * FROM items WHERE post_id = {post[0]}")
+            post = {"post_id": post[0], "latitude": post[1], "longitude": post[2], "created_at": post[3]}
+            posts.append(post)
+        for post in posts:
+            post_id = post["post_id"]
+            items_res = cur.execute(f"SELECT * FROM items WHERE post_id = {post_id}")
             items = []
             for item in items_res:
                 item_dict = {"item_id": item[0], "item_name": item[1], "item_description": item[2]}
                 items.append(item_dict)
-            post = {"post_id": post[0], "latitude": post[1], "longitude": post[2], "created_at": post[3], "items": items}
-            posts.append(post)
+            post["items"] = items
         return posts
 
 
     def createPost(self, lat, lon):
         cur = self.con.cursor()
-        cur.execute("""
-            INSERT INTO posts (latitude, longitude, created_at) VALUES
-                ({}, {}, {})""".format(lat, lon, time.time())
-        )
+        cur.execute("""INSERT INTO posts (latitude, longitude, created_at) VALUES ({}, {}, {})""".format(lat, lon, time.time()))
         self.con.commit()
 
     def updateTimestampPost(self,post_id):
