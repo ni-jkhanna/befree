@@ -128,6 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+*.db
 /node_modules
 /.pnp
 .pnp.js
