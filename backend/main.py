@@ -13,7 +13,7 @@ def getAllPosts():
 
 @app.route('/createPost', methods=['POST'])
 def createPost(coordinates):
-    return db.createPost(coordinates.get('lat'),coordinates.get('lon'))
+    return db.createPost(coordinates.get('lat'),coordinates.get('lng'))
 
 
 @app.route('/<postId>/addItem, addItem', methods=['POST'])
