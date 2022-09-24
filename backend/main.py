@@ -16,15 +16,12 @@ def createPost(coordinates):
     return db.createPost(coordinates.get('lat'),coordinates.get('lon'))
 
 
-@app.route('/<postId>/addItem, addItem', methods=['POST'])
-def addItem(postId):
-    return 1
+@app.route('/<postId>/addItem', methods=['POST'])
+def addItem(postId, itemName, itemDescription):
+    return db.createItem(postId, itemName, itemDescription)
 
 @app.route('/<itemId>/deleteItem', methods=['DELETE'])
 def deleteItem(itemId):
     return 1
-
-
-id = createPost({'lat':2,"lon":1})
-id = createPost({'lat':3,"lon":4})
-print(getAllPosts())
+    
+db.closeCon()
