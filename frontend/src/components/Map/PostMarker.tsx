@@ -3,27 +3,38 @@ import { Dispatch, useMemo } from "react";
 import { Post } from "../../types";
 
 const ICON_COLORS = ["teal", "green", "yellow", "red"];
+const ONE_HOUR = 60*60;
+const TEN_HOURS = 10*60*60;
+const DAY = 24*60*60;
 
 const getIconColor = (postTimestamp: number) => {
-  // TODO: compare timestamp to current time
-  // if brand new
   const color = (postTimestamp: number) => {
-    if (true) {
+
+    let currentTime = getCurrentTimestamp();
+    
+    let age = postTimestamp - currentTime;
+
+    if (age <= ONE_HOUR) {//1
       return ICON_COLORS[0];
     }
-    if (false) {
+    else if (age <= TEN_HOURS) {//10
       return ICON_COLORS[1];
     }
-    if (false) {
+    else if (age <= DAY) {//24
       return ICON_COLORS[2];
     }
-    if (false) {
+    else {
       return ICON_COLORS[3];
     }
   };
 
   return `${process.env.PUBLIC_URL}/small_marker_${color(postTimestamp)}.png`;
 };
+
+function getCurrentTimestamp () {
+    return Date.now()*100//Seconds
+  }
+  
 
 const PostMarker = ({
   post,
