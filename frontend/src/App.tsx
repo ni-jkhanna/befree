@@ -11,21 +11,24 @@ import PostPage from "./pages/PostPage/PostPage";
 import MapPage from "./pages/MapPage/MapPage";
 import { PAGES } from "./constants";
 import PostPageWrapper from "./pages/PostPage/PostPageWrapper";
+import StoreProvider from "./contexts/StoreContext";
 
 function App() {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        <TopAppBar />
-        <CssBaseline />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<MapPage />} />
-            <Route path={`/${PAGES.POST}`} element={<PostPageWrapper />}>
-              <Route path={":postId"} element={<PostPage />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
+        <StoreProvider>
+          <TopAppBar />
+          <CssBaseline />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<MapPage />} />
+              <Route path={`/${PAGES.POST}`} element={<PostPageWrapper />}>
+                <Route path={":postId"} element={<PostPage />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </StoreProvider>
       </ThemeProvider>
     </div>
   );

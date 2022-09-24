@@ -1,7 +1,10 @@
 import { Box } from "@mui/material";
+import { useStore } from "./../../contexts/StoreContext";
 
 const MapPage = () => {
-  return <Box>map goes here</Box>;
+  const { posts } = useStore();
+
+  return <Box>{JSON.stringify(posts)}</Box>;
 };
 
 export default MapPage;
