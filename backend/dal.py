@@ -43,7 +43,8 @@ class Dal:
             "post_id": last_id,
             "lat": lat,
             "lng": lon,
-            "created_at": now
+            "created_at": now,
+            "items": []
         }
 
     def updateTimestampPost(self,post_id):
