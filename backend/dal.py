@@ -33,13 +33,8 @@ class Dal:
     def createPost(self, lat, lon):
         cur = self.con.cursor()
         cur.execute("""
-<<<<<<< HEAD
             INSERT INTO posts (latitude, longitude, created_at) VALUES
                 ({}, {}, {})""".format(lat, lon, time.time())
-=======
-            INSERT INTO posts VALUES
-                ({0}, {1}, {2})""".format(lat, lon, time.time())
->>>>>>> fdf96345f901fff1b491cc212cc5db2c65f06f9c
         )
         self.con.commit()
 
