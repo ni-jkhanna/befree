@@ -16,7 +16,7 @@ def getAllPosts():
 @app.route('/createPost', methods=['POST'])
 def createPost(coordinates):
     id = db.createPost(coordinates.get('lat'),coordinates.get('lon'))
-
+    cleanExpiredPosts()
     return id
 
 
