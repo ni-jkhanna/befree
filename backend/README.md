@@ -35,13 +35,17 @@ Create Post
 curl --location --request POST 'http://127.0.0.1:5000/createPost' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "postId": 2,
-    "itemName": "asdasdad",
-    "itemDescription": "asdasdasd"
+    "lat": "52.51056620481168",
+    "lng": "13.466203931227092"
 }'
 ```
 
 Delete Item 1
 ```
 curl --location --request DELETE 'http://127.0.0.1:5000/1/deleteItem'
+```
+
+Search for Adidas
+```
+curl --location --request GET 'http://127.0.0.1:5000/search?query=adidas'
 ```

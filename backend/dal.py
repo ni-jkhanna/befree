@@ -20,7 +20,7 @@ class Dal:
         output  = cur.execute("SELECT * FROM posts")
         posts = []
         for post in output:
-            post = {"post_id": post[0], "latitude": post[1], "longitude": post[2], "created_at": post[3]}
+            post = {"post_id": post[0], "lat": post[1], "lng": post[2], "created_at": post[3]}
             posts.append(post)
         for post in posts:
             post_id = post["post_id"]
@@ -35,8 +35,16 @@ class Dal:
 
     def createPost(self, lat, lon):
         cur = self.con.cursor()
-        cur.execute("""INSERT INTO posts (latitude, longitude, created_at) VALUES ({}, {}, {})""".format(lat, lon, time.time()))
+        now = time.time()
+        cur.execute("""INSERT INTO posts (latitude, longitude, created_at) VALUES ({}, {}, {})""".format(lat, lon, now))
+        last_id =  cur.lastrowid
         self.con.commit()
+        return {
+            "post_id": last_id,
+            "lat": lat,
+            "lng": lon,
+            "created_at": now
+        }
 
     def updateTimestampPost(self,post_id):
         cur = self.con.cursor()
