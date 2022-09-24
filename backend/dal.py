@@ -35,8 +35,16 @@ class Dal:
 
     def createPost(self, lat, lon):
         cur = self.con.cursor()
-        cur.execute("""INSERT INTO posts (latitude, longitude, created_at) VALUES ({}, {}, {})""".format(lat, lon, time.time()))
+        now = time.time()
+        cur.execute("""INSERT INTO posts (latitude, longitude, created_at) VALUES ({}, {}, {})""".format(lat, lon, now))
+        last_id =  cur.lastrowid
         self.con.commit()
+        return {
+            "post_id": last_id,
+            "lat": lat,
+            "lng": lon,
+            "created_at": now
+        }
 
     def updateTimestampPost(self,post_id):
         cur = self.con.cursor()

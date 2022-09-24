@@ -20,7 +20,6 @@ def cleanExpiredPosts():
     cutoffDate = time.time() - TTL_POST*60/2
     db.cleanupBefore(cutoffDate)
 
-
 @app.route('/getAllPosts', methods=['GET'])
 def getAllPosts():
     cleanExpiredPosts()
@@ -44,8 +43,8 @@ def search():
 @app.route('/createPost', methods=['POST'])
 def createPost():
     data = request.json
-    id = db.createPost(data.get('lat'), data.get('lng'))
-    return id
+    post = db.createPost(data.get('lat'), data.get('lng'))
+    return post
 
 @app.route('/<postId>/addItem', methods=['POST'])
 def addItem(postId):
