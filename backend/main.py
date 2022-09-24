@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from dal import Dal
 
 app = Flask(__name__)
@@ -23,5 +23,7 @@ def addItem(postId, itemName, itemDescription):
 @app.route('/<itemId>/deleteItem', methods=['DELETE'])
 def deleteItem(itemId):
     return 1
-    
-db.closeCon()
+
+createPost({'lat':2,"lng":1})
+addItem(1,"item name", "sddsdasdfigasufgsaufva")
+    # print(getAllPosts())    

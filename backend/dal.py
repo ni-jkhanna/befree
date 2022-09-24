@@ -6,11 +6,8 @@ db_name = "befree.db"
 
 class Dal:
     def __init__(self) -> None:
-        self.con = sqlite3.connect(db_name)
+        self.con = sqlite3.connect(db_name, check_same_thread=False)
         self.run_migrations()
-
-    def close_conn(self):
-        self.con.close()
 
     def run_migrations(self):
         cur = self.con.cursor()
@@ -39,6 +36,7 @@ class Dal:
                 ({}, {}, {})""".format(lat, lon, time.time())
         )
         self.con.commit()
+
 
     def createItem(self,post_id,item_name,description):
         cur = self.con.cursor()
