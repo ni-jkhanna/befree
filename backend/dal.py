@@ -20,7 +20,7 @@ class Dal:
         output  = cur.execute("SELECT * FROM posts")
         posts = []
         for post in output:
-            post = {"post_id": post[0], "latitude": post[1], "longitude": post[2], "created_at": post[3]}
+            post = {"post_id": post[0], "lat": post[1], "lng": post[2], "created_at": post[3]}
             posts.append(post)
         for post in posts:
             post_id = post["post_id"]

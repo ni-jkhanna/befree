@@ -26,10 +26,20 @@ def getAllPosts():
     cleanExpiredPosts()
     return  json.dumps(db.getAllPosts())
 
-# @app.route('/search', methods=['GET'])
-# def search():
-#     posts = db.getAllPosts()
-
+@app.route('/search', methods=['GET'])
+def search():
+    search_query = request.args.get("query")
+    cleanExpiredPosts()
+    posts = db.getAllPosts()
+    filtered_posts = []
+    for post in posts:
+        items = post["items"]
+        if len(items) > 0:
+            for item in items:
+                if search_query.lower() in item["item_name"].lower() or search_query.lower() in item["item_description"].lower():
+                    filtered_posts.append(post)
+                    break
+    return json.dumps(filtered_posts)
 
 @app.route('/createPost', methods=['POST'])
 def createPost():

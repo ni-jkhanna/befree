@@ -45,3 +45,8 @@ Delete Item 1
 ```
 curl --location --request DELETE 'http://127.0.0.1:5000/1/deleteItem'
 ```
+
+Search for Adidas
+```
+curl --location --request GET 'http://127.0.0.1:5000/search?query=adidas'
+```
