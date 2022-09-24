@@ -4,6 +4,7 @@ import theme from "../../theme";
 import { Post } from "../../types";
 import PostItem from "./PostItem";
 import { Coordiantes } from "./../../types";
+import CreatePostItem from "./CreatePostItem";
 
 const sx = {
   ".post-item:nth-child(even)": {
@@ -11,30 +12,21 @@ const sx = {
   },
 };
 
-interface ExisitingPostProps {
+interface Props {
   post: Post;
   coordinates: undefined;
 }
 
-interface NewPostProps {
-  post: undefined;
-  coordinates: Coordiantes;
-}
-
-const PostContainer = ({
-  post,
-  coordinates,
-}: ExisitingPostProps | NewPostProps) => {
+const PostContainer = ({ post, coordinates }: Props) => {
   console.log(post);
   return (
     <Paper elevation={ELEVATION}>
-      {post && (
-        <Box sx={sx}>
-          {post.items.map((item) => (
-            <PostItem key={item.item_id} item={item} />
-          ))}
-        </Box>
-      )}
+      <Box sx={sx}>
+        {post?.items.map((item) => (
+          <PostItem key={item.item_id} item={item} />
+        ))}
+        <CreatePostItem postId={post.post_id} />
+      </Box>
     </Paper>
   );
 };

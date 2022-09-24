@@ -9,28 +9,12 @@ import { Coordiantes } from "./../types";
 const MainPage = () => {
   const { loading } = usePosts();
   const [selectedPost, setSelectedPost] = useState<Post | undefined>(undefined);
-  const [postCreationCoordinates, setPostCreationCoordinates] = useState<
-    Coordiantes | undefined
-  >(undefined);
-
-  console.log(selectedPost);
 
   return (
     <Stack spacing={2}>
-      {loading ? (
-        "Loading posts..."
-      ) : (
-        <Map
-          setSelectedPost={setSelectedPost}
-          postCreationCoordinates={postCreationCoordinates}
-          setPostCreationCoordinates={setPostCreationCoordinates}
-        />
-      )}
+      {loading ? "Loading posts..." : <Map setSelectedPost={setSelectedPost} />}
       {selectedPost && (
         <PostContainer post={selectedPost} coordinates={undefined} />
-      )}
-      {postCreationCoordinates && (
-        <PostContainer post={undefined} coordinates={postCreationCoordinates} />
       )}
     </Stack>
   );

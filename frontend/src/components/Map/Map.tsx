@@ -7,6 +7,7 @@ import { lightMapStyles, darkMapStyles } from "./mapStyles";
 import { Paper } from "@mui/material";
 import { ELEVATION } from "../../constants";
 import NewPostMarker from "./NewPostMarker";
+import { createPostfix } from "typescript";
 
 const containerStyle = {
   // width: "400px",
@@ -20,14 +21,10 @@ const center = {
 
 const Map = ({
   setSelectedPost,
-  postCreationCoordinates,
-  setPostCreationCoordinates,
 }: {
   setSelectedPost: Dispatch<Post | undefined>;
-  postCreationCoordinates: Coordiantes | undefined;
-  setPostCreationCoordinates: Dispatch<Coordiantes | undefined>;
 }) => {
-  const { posts, darkModeOn } = usePosts();
+  const { posts, darkModeOn, createPost } = usePosts();
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyAgKHxqZNOWnkknLpfP_k5GjsxTB88lrUY",
@@ -53,10 +50,11 @@ const Map = ({
 
   const handleClick = useCallback(
     (lat: number, lng: number) => {
-      setSelectedPost(undefined);
-      setPostCreationCoordinates({ lat, lng });
+      createPost(lat, lng, (data) => {
+        setSelectedPost(data);
+      });
     },
-    [setPostCreationCoordinates, setSelectedPost]
+    [createPost, setSelectedPost]
   );
 
   return isLoaded ? (
@@ -82,15 +80,12 @@ const Map = ({
         {posts.map((post) => {
           return (
             <PostMarker
-              key={post.id}
+              key={post.post_id}
               post={post}
               setSelectedPost={setSelectedPost}
             />
           );
         })}
-        {postCreationCoordinates && (
-          <NewPostMarker coordinates={postCreationCoordinates} />
-        )}
       </GoogleMap>
     </Paper>
   ) : (

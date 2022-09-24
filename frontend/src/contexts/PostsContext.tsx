@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 import axios from "axios";
-import { Post } from "../types";
+import { Item, Post } from "../types";
 
 interface Context {
   posts: Post[];
@@ -17,6 +17,18 @@ interface Context {
   removeItemFromPost: (itemId: number) => void;
   darkModeOn: boolean;
   setDarkModeOn: Dispatch<boolean>;
+  createPost: (
+    lat: number,
+    lng: number,
+    callback: (data: Post) => void
+  ) => void;
+  addItemToPost: (
+    postId: number,
+    item: {
+      itemName: string;
+      itemDescription: string;
+    }
+  ) => void;
 }
 const PostsContext = createContext<Context>({
   posts: [],
@@ -24,6 +36,8 @@ const PostsContext = createContext<Context>({
   removeItemFromPost: (itemId) => {},
   darkModeOn: true,
   setDarkModeOn: (state) => {},
+  createPost: (lat, lng, callback) => {},
+  addItemToPost: (postId, item) => {},
 });
 
 const URL = "http://localhost:5000";
@@ -33,16 +47,16 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
   const [loading, setLoading] = useState(false);
 
   const loadPosts = useCallback(() => {
-    setLoading(true);
+    // setLoading(true);
     axios
       .get(`${URL}/getAllPosts`)
       .then((res) => {
-        console.log(res)
-        setLoading(false);
+        console.log(res);
+        // setLoading(false);
         setPosts(res.data);
       })
       .catch((err) => {
-        setLoading(false);
+        // setLoading(false);
         console.log(err);
       });
   }, []);
@@ -59,6 +73,40 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  const createPost = useCallback(
+    (lat: number, lng: number, callback: (data: Post) => void) => {
+      axios
+        .post(`${URL}/createPost`, { lat, lng })
+        .then((res) => {
+          console.log(res);
+          loadPosts();
+          callback(res.data);
+        })
+        .catch((err) => {
+          // setLoading(false);
+          console.log(err);
+        });
+    },
+    [loadPosts]
+  );
+
+  const addItemToPost = useCallback(
+    (postId: number, item: { itemName: string; itemDescription: string }) => {
+      console.log("add items");
+      axios
+        .post(`${URL}/${postId}/addItem`, item)
+        .then((res) => {
+          console.log(res);
+          loadPosts();
+        })
+        .catch((err) => {
+          // setLoading(false);
+          console.log(err);
+        });
+    },
+    [loadPosts]
+  );
 
   const [darkModeOn, setDarkModeOn] = useState(true);
 
@@ -81,8 +129,10 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
       removeItemFromPost,
       darkModeOn,
       setDarkModeOn,
+      createPost,
+      addItemToPost,
     }),
-    [darkModeOn, loading, posts, removeItemFromPost]
+    [createPost, darkModeOn, loading, posts, removeItemFromPost]
   );
 
   return (
