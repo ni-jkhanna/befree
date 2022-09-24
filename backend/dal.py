@@ -50,5 +50,14 @@ class Dal:
         )
         self.con.commit()
 
+    def cleanupBefore(self, timestamp_cutoff):
+        cur = self.con.cursor()
+        cur.execute(f"""
+            DELETE FROM posts WHERE created_at <= {timestamp_cutoff}
+        """)
+        cur.execute(f"""
+            DELETE FROM items WHERE created_at <= {timestamp_cutoff}
+        """)
+
     def closeCon(self):
         self.con.close()
