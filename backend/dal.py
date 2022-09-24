@@ -1,3 +1,4 @@
+from re import A
 import sqlite3
 import time
 
@@ -37,7 +38,10 @@ class Dal:
         )
         self.con.commit()
 
-
+    def updateTimestampPost(self,post_id):
+        cur = self.con.cursor()
+        return cur.execute(f"UPDATE posts SET created_at = {time.time()} WHERE post_id={post_id}")
+        
     def createItem(self,post_id,item_name,description):
         cur = self.con.cursor()
         cur.execute("""INSERT INTO items (item_name, item_description, post_id, created_at) VALUES ('{}', '{}', {}, {})""".format(item_name, description, post_id, time.time()))
@@ -50,6 +54,13 @@ class Dal:
         )
         self.con.commit()
 
+    def deletePost(self, post_id):
+        cur = self.con.cursor()
+        cur.execute("""
+            DELETE FROM posts WHERE post_id = {}""".format(post_id)
+        )
+        self.con.commit()
+
     def cleanupBefore(self, timestamp_cutoff):
         cur = self.con.cursor()
         cur.execute(f"""
@@ -58,6 +69,28 @@ class Dal:
         cur.execute(f"""
             DELETE FROM items WHERE created_at <= {timestamp_cutoff}
         """)
+        self.con.commit()
+
+
+    def getItem(self, id):
+        cur = self.con.cursor()
+        item = cur.execute(f"""
+            SELECT * FROM items WHERE item_id = {id}
+        """)
+        item_dict = {"item_id": item[0], "item_name": item[1], "item_description": item[2], "post_id": item[3]}
+        return item_dict
+
+    def getItemsForPostId(self,post_id):
+        cur = self.con.cursor()
+        items = cur.execute(f"""
+            SELECT * FROM items where post_id = {post_id}
+        """)
+        itemsList = []
+        for item in items:
+            item_dict = {"item_id": item[0], "item_name": item[1], "item_description": item[2]}
+            itemsList.append(item_dict) 
+
+        return itemsList
 
     def closeCon(self):
         self.con.close()
