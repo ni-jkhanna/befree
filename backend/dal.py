@@ -74,16 +74,18 @@ class Dal:
 
     def getItem(self, id):
         cur = self.con.cursor()
-        item = cur.execute(f"""
+        items = cur.execute(f"""
             SELECT * FROM items WHERE item_id = {id}
         """)
-        item_dict = {"item_id": item[0], "item_name": item[1], "item_description": item[2], "post_id": item[3]}
+        item_dict = {}
+        for item in items:
+            item_dict = {"item_id": item[0], "item_name": item[1], "item_description": item[2], "post_id": item[3]}
         return item_dict
 
     def getItemsForPostId(self,post_id):
         cur = self.con.cursor()
         items = cur.execute(f"""
-            SELECT * FROM items where post_id = {post_id}
+            SELECT * FROM items WHERE post_id = {post_id}
         """)
         itemsList = []
         for item in items:
