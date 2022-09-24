@@ -1,6 +1,8 @@
 import sqlite3
 import time
 
+from backend.main import deleteItem
+
 db_name = "befree.db"
 
 class Dal:
@@ -22,7 +24,25 @@ class Dal:
     def createPost(self, lat, lon):
         cur = self.con.cursor()
         cur.execute("""
-            INSERT INTO post VALUES
+            INSERT INTO posts VALUES
                 ({0}, {1}, {2})""".format(lat, lon, time.time())
         )
         self.con.commit()
+
+    def createItem(self, item_name, post_id):
+        cur = self.con.cursor()
+        cur.execute("""
+            INSERT INTO items VALUES
+                ({0}, {1})""".format(item_name, post_id)
+        )
+        self.con.commit()
+
+    def deleteItem(self, item_id):
+        cur = self.con.cursor()
+        cur.execute("""
+            DELETE FROM items WHERE item_id = {}""".format(item_id)
+        )
+        self.con.commit()
+
+    def closeCon(self):
+        self.con.close()
