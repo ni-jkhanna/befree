@@ -11,34 +11,40 @@ import { Post } from "../types";
 
 interface Context {
   posts: Post[];
+  loading: boolean;
 }
-const StoreContext = createContext<Context>({
+const PostsContext = createContext<Context>({
   posts: [],
+  loading: false,
 });
 
-const StoreProvider = ({ children }: PropsWithChildren<{}>) => {
+const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get("http://localhost:5000/getAllPosts")
       .then((res) => {
+        setLoading(false);
         setPosts(res.data.posts);
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   }, []);
 
-  const value = useMemo(() => ({ posts }), [posts]);
+  const value = useMemo(() => ({ posts, loading }), [loading, posts]);
   return (
-    <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
+    <PostsContext.Provider value={value}>{children}</PostsContext.Provider>
   );
 };
 
-export const useStore = () => {
-  const store = useContext(StoreContext);
+export const usePosts = () => {
+  const store = useContext(PostsContext);
   return store;
 };
 
-export default StoreProvider;
+export default PostsProvider;

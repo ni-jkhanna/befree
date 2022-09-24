@@ -11,13 +11,13 @@ import PostPage from "./pages/PostPage/PostPage";
 import MapPage from "./pages/MapPage/MapPage";
 import { PAGES } from "./constants";
 import PostPageWrapper from "./pages/PostPage/PostPageWrapper";
-import StoreProvider from "./contexts/StoreContext";
+import PostsProvider from "./contexts/PostsContext";
 
 function App() {
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
-        <StoreProvider>
+        <PostsProvider>
           <TopAppBar />
           <CssBaseline />
           <BrowserRouter>
@@ -28,7 +28,7 @@ function App() {
               </Route>
             </Routes>
           </BrowserRouter>
-        </StoreProvider>
+        </PostsProvider>
       </ThemeProvider>
     </div>
   );
