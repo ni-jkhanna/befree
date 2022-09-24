@@ -3,10 +3,11 @@ from flask_cors import CORS
 from data import create_test_data
 from dal import Dal
 import json
+import time
 
 
-#TODO logic for the deletion upon expiration 
-#TODO prefill test data
+TTL_POST = 2#days
+
 app = Flask(__name__)
 db = Dal()
 cors = CORS(app)
@@ -20,14 +21,32 @@ def getAllPosts():
 
 @app.route('/createPost', methods=['POST'])
 def createPost(coordinates):
-    return db.createPost(coordinates.get('lat'),coordinates.get('lng'))
+    id = db.createPost(coordinates.get('lat'),coordinates.get('lng'))
+    cleanExpiredPosts()
+    return id
+
+
+
 
 
 @app.route('/<postId>/addItem', methods=['POST'])
 def addItem(postId, itemName, itemDescription):
-    return db.createItem(postId, itemName, itemDescription)
+    res = db.createItem(postId, itemName, itemDescription)
+    db.updateTimestampPost(postId)
+    return res
 
 @app.route('/<itemId>/deleteItem', methods=['DELETE'])
 def deleteItem(itemId):
-    #TODO if we deleted the last one, delete the post
-    return db.deleteItem(itemId)
+    itemToDelete = db.getItem(itemId)
+    samePostItems = db.getItemsForPostId(itemToDelete.get('post_id'))
+    deletedId = db.deleteItem(itemId)
+    if len(samePostItems) == 0:
+        db.deletePost(itemToDelete.get('post_id'))
+    return deletedId
+
+
+
+
+def cleanExpiredPosts():
+    cutoffDate = time.time() - TTL_POST*24*60*60*100
+    db.cleanupBefore(cutoffDate)
