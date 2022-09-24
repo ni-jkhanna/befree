@@ -6,7 +6,7 @@ export interface Item {
 
 export interface Post {
   post_id: number;
-  createdAt: number;
+  created_at: number;
   lat: number;
   lng: number;
   items: Item[];

@@ -33,8 +33,8 @@ const PostMarker = ({
   setSelectedPost: Dispatch<Post | undefined>;
 }) => {
   const markerIcon = useMemo(
-    () => getIconColor(post.createdAt),
-    [post.createdAt]
+    () => getIconColor(post.created_at),
+    [post.created_at]
   );
 
   return (
