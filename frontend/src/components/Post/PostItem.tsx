@@ -1,9 +1,11 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
+import { Remove } from "@mui/icons-material";
 import { Item } from "../../types";
 import { usePosts } from "../../contexts/PostsContext";
 
 const PostItem = ({ item }: { item: Item }) => {
-  const { removeItemFromPost } = usePosts();
+  const { removeItemFromPost, selectedPost } = usePosts();
+  console.log("xxxxx", selectedPost);
   return (
     <Stack
       direction={"row"}
@@ -19,10 +21,12 @@ const PostItem = ({ item }: { item: Item }) => {
       <Stack spacing={2}>
         <Button
           variant="contained"
-          color="error"
-          onClick={() => removeItemFromPost(item.item_id)}
+          color="warning"
+          onClick={() =>
+            removeItemFromPost(selectedPost!.post_id, item.item_id)
+          }
         >
-          Remove
+          <Remove />
         </Button>
       </Stack>
     </Stack>

@@ -8,7 +8,7 @@ import { ELEVATION } from "../../constants";
 
 const containerStyle = {
   // width: "400px",
-  height: "400px",
+  height: "100vh",
 };
 
 const center = {

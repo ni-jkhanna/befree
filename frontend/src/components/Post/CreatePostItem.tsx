@@ -1,20 +1,32 @@
 import { Stack, Button, TextField } from "@mui/material";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { usePosts } from "./../../contexts/PostsContext";
 
 const CreatePostItem = ({ postId }: { postId: number }) => {
   const [itemName, setItemName] = useState("");
   const [itemDescription, setItemDescription] = useState("");
   const { addItemToPost } = usePosts();
+  const [nameError, setNameError] = useState(false);
+  const [descriptionError, setDescriptionError] = useState(false);
+
+  useEffect(() => {
+    setNameError(false);
+  }, [itemName]);
+
+  useEffect(() => {
+    setDescriptionError(false);
+  }, [itemDescription]);
 
   const handleClick = useCallback(() => {
     if (itemName === "") {
       // TODO: add name error
+      setNameError(true);
       return;
     }
 
     if (itemDescription === "") {
       // TODO: add description error
+      setDescriptionError(true);
       return;
     }
 
@@ -24,6 +36,8 @@ const CreatePostItem = ({ postId }: { postId: number }) => {
       itemName,
       itemDescription,
     });
+    setItemName("");
+    setItemDescription("");
   }, [addItemToPost, itemDescription, itemName, postId]);
 
   return (
@@ -43,6 +57,7 @@ const CreatePostItem = ({ postId }: { postId: number }) => {
         onChange={(e) => {
           setItemName(e.target.value);
         }}
+        error={nameError}
       />
       <TextField
         sx={{ width: "100%" }}
@@ -53,6 +68,7 @@ const CreatePostItem = ({ postId }: { postId: number }) => {
         onChange={(e) => {
           setItemDescription(e.target.value);
         }}
+        error={descriptionError}
       />
       <Button variant="contained" onClick={handleClick}>
         Add

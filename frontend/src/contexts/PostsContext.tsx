@@ -14,7 +14,7 @@ import { Post } from "../types";
 interface Context {
   posts: Post[];
   loading: boolean;
-  removeItemFromPost: (itemId: number) => void;
+  removeItemFromPost: (postId: number, itemId: number) => void;
   darkModeOn: boolean;
   setDarkModeOn: Dispatch<boolean>;
   createPost: (
@@ -35,7 +35,7 @@ interface Context {
 const PostsContext = createContext<Context>({
   posts: [],
   loading: false,
-  removeItemFromPost: (itemId) => {},
+  removeItemFromPost: (postId, itemId) => {},
   darkModeOn: true,
   setDarkModeOn: (state) => {},
   createPost: (lat, lng, callback) => {},
@@ -50,14 +50,14 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const loadPosts = useCallback(() => {
+  const loadPosts = useCallback((callback?: (data: Post[]) => void) => {
     // setLoading(true);
     axios
       .get(`${URL}/getAllPosts`)
       .then((res) => {
-        console.log(res);
         // setLoading(false);
         setPosts(res.data);
+        callback && callback(res.data);
       })
       .catch((err) => {
         // setLoading(false);
@@ -69,11 +69,16 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
     loadPosts();
   }, [loadPosts]);
 
-  const removeItemFromPost = useCallback((itemId: number) => {
+  const removeItemFromPost = useCallback((postId: number, itemId: number) => {
+    console.log(selectedPost);
     axios
       .delete(`${URL}/${itemId}/deleteItem`)
       .then((data) => {
         console.log(`Deleted item ${itemId} successfully!`, data);
+        loadPosts((data) => {
+          const updatedSelectedPost = data.find((x) => x.post_id === postId);
+          setSelectedPost(updatedSelectedPost);
+        });
       })
       .catch((err) => console.log(err));
   }, []);
@@ -83,7 +88,6 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
       axios
         .post(`${URL}/createPost`, { lat, lng })
         .then((res) => {
-          console.log(res);
           loadPosts();
           callback(res.data);
         })
@@ -97,12 +101,13 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
 
   const addItemToPost = useCallback(
     (postId: number, item: { itemName: string; itemDescription: string }) => {
-      console.log("add items");
       axios
         .post(`${URL}/${postId}/addItem`, item)
         .then((res) => {
-          console.log(res);
-          loadPosts();
+          loadPosts((data) => {
+            const x = data?.find((x) => x.post_id === postId);
+            setSelectedPost(x);
+          });
         })
         .catch((err) => {
           // setLoading(false);
@@ -117,18 +122,6 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
 
   const value = useMemo(
     () => ({
-      // posts: [
-      //   {
-      //     id: 2,
-      //     lat: 52.4936,
-      //     lng: 13.4469,
-      //     items: [
-      //       { itemName: "Baby Clothes", postId: 1, itemId: 1 },
-      //       { itemName: "Kid Clothes", postId: 1, itemId: 2 },
-      //       { itemName: "Men clothes", postId: 1, itemId: 3 },
-      //     ],
-      //   },
-      // ] as Post[],
       posts,
       loading,
       removeItemFromPost,

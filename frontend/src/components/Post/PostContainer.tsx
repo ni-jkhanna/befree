@@ -6,6 +6,9 @@ import PostItem from "./PostItem";
 import CreatePostItem from "./CreatePostItem";
 
 const sx = {
+  position: "absolute",
+  right: "140px",
+  top: "40px",
   ".post-item:nth-child(even)": {
     "background-color": theme.palette.divider,
   },
@@ -19,13 +22,11 @@ interface Props {
 const PostContainer = ({ post, coordinates }: Props) => {
   console.log(post);
   return (
-    <Paper elevation={ELEVATION}>
-      <Box sx={sx}>
-        {post?.items.map((item) => (
-          <PostItem key={item.item_id} item={item} />
-        ))}
-        <CreatePostItem postId={post.post_id} />
-      </Box>
+    <Paper elevation={ELEVATION} sx={sx}>
+      {post?.items.map((item) => (
+        <PostItem key={item.item_id} item={item} />
+      ))}
+      <CreatePostItem postId={post.post_id} />
     </Paper>
   );
 };

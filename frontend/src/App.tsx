@@ -14,13 +14,8 @@ function App() {
     <div className="App">
       <ThemeProvider theme={theme}>
         <PostsProvider>
-          <TopAppBar />
           <CssBaseline />
-          <Box marginTop={5}>
-            <Container>
-              <MainPage />
-            </Container>
-          </Box>
+          <MainPage />
         </PostsProvider>
       </ThemeProvider>
     </div>
