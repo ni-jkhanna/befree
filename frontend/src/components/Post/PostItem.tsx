@@ -10,7 +10,7 @@ const PostItem = ({ item }: { item: Item }) => {
       direction={"row"}
       justifyContent={"space-between"}
       className={"post-item"}
-      padding={4}
+      padding={1}
     >
       <Box marginY="auto">
         <Typography>

@@ -10,7 +10,7 @@ import {
 } from "react";
 import axios from "axios";
 import { Post } from "../types";
-import SearchBar from "./../components/SearchBar/SearchBar";
+import { URL } from "../constants";
 
 interface Context {
   posts: Post[];
@@ -46,8 +46,6 @@ const PostsContext = createContext<Context>({
   searchText: "",
   setSearchText: (searchText) => {},
 });
-
-const URL = "http://localhost:5000";
 
 const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
   const [posts, setPosts] = useState([]);

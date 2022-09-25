@@ -1,8 +1,10 @@
+import { Add } from "@mui/icons-material";
 import { Stack, Button, TextField } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { usePosts } from "./../../contexts/PostsContext";
 
-const CreatePostItem = ({ postId }: { postId: number }) => {
+const CreatePostItem = () => {
+  const { selectedPost } = usePosts();
   const [itemName, setItemName] = useState("");
   const [itemDescription, setItemDescription] = useState("");
   const { addItemToPost } = usePosts();
@@ -18,6 +20,9 @@ const CreatePostItem = ({ postId }: { postId: number }) => {
   }, [itemDescription]);
 
   const handleClick = useCallback(() => {
+    if (!selectedPost) {
+      return;
+    }
     if (itemName === "") {
       // TODO: add name error
       setNameError(true);
@@ -32,13 +37,13 @@ const CreatePostItem = ({ postId }: { postId: number }) => {
 
     console.log("sending");
 
-    addItemToPost(postId, {
+    addItemToPost(selectedPost.post_id, {
       itemName,
       itemDescription,
     });
     setItemName("");
     setItemDescription("");
-  }, [addItemToPost, itemDescription, itemName, postId]);
+  }, [addItemToPost, itemDescription, itemName, selectedPost]);
 
   return (
     <Stack
@@ -46,7 +51,7 @@ const CreatePostItem = ({ postId }: { postId: number }) => {
       marginY="auto"
       spacing={2}
       width={"100%"}
-      padding={4}
+      padding={2}
       className={"post-item"}
     >
       <TextField
@@ -71,7 +76,7 @@ const CreatePostItem = ({ postId }: { postId: number }) => {
         error={descriptionError}
       />
       <Button variant="contained" onClick={handleClick}>
-        Add
+        <Add />
       </Button>
     </Stack>
   );

@@ -14,14 +14,9 @@ const getIconColor = (postTimestamp: number) => {
 
     let age = postTimestamp - currentTime;
 
-    if (age <= ONE_HOUR) {
-      //1
-      return ICON_COLORS[0];
-    } else if (age <= TEN_HOURS) {
-      //10
+    if (age <= TEN_HOURS) {
       return ICON_COLORS[1];
     } else if (age <= DAY) {
-      //24
       return ICON_COLORS[2];
     } else {
       return ICON_COLORS[3];
@@ -36,11 +31,12 @@ function getCurrentTimestamp() {
 }
 
 const PostMarker = ({ post }: { post: Post }) => {
-  const { setSelectedPost } = usePosts();
-  const markerIcon = useMemo(
-    () => getIconColor(post.created_at),
-    [post.created_at]
-  );
+  const { setSelectedPost, selectedPost } = usePosts();
+  const markerIcon = useMemo(() => {
+    return selectedPost && selectedPost.post_id === post.post_id
+      ? `${process.env.PUBLIC_URL}/small_marker_${ICON_COLORS[0]}.png`
+      : getIconColor(post.created_at);
+  }, [post.created_at, post.post_id, selectedPost]);
 
   return (
     // @ts-ignore

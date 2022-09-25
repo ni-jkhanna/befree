@@ -1,12 +1,14 @@
-import { Box, Paper, TextField } from "@mui/material";
+import { Box, Paper, SxProps, TextField } from "@mui/material";
 import { ELEVATION } from "../../constants";
 import { usePosts } from "../../contexts/PostsContext";
+import theme from "../../theme";
 
-const sx = {
+const sx: SxProps = {
   position: "absolute",
   top: "40px",
-  left: "400px",
+  right: "10%",
   width: "50%",
+  backgroundColor: theme.palette.background.default,
 };
 
 const SearchBar = () => {
@@ -18,7 +20,7 @@ const SearchBar = () => {
         <TextField
           fullWidth
           id="filled-basic"
-          label="Filter Items"
+          label="Search"
           variant="filled"
           value={searchText}
           onChange={(e) => {

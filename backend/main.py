@@ -7,7 +7,7 @@ import json
 import time
 
 
-TTL_POST = 2#days
+TTL_POST = 200#days
 
 app = Flask(__name__)
 db = Dal()

@@ -1,5 +1,3 @@
-export const PAGES = {
-  POST: "post",
-};
-
 export const ELEVATION = 5;
+
+export const URL = "http://localhost:5000";
