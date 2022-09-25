@@ -5,7 +5,6 @@ import { usePosts } from "../../contexts/PostsContext";
 
 const PostItem = ({ item }: { item: Item }) => {
   const { removeItemFromPost, selectedPost } = usePosts();
-  console.log("xxxxx", selectedPost);
   return (
     <Stack
       direction={"row"}
@@ -22,9 +21,7 @@ const PostItem = ({ item }: { item: Item }) => {
         <Button
           variant="contained"
           color="warning"
-          onClick={() =>
-            removeItemFromPost(selectedPost!.post_id, item.item_id)
-          }
+          onClick={() => removeItemFromPost(item.item_id)}
         >
           <Remove />
         </Button>

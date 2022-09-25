@@ -13,7 +13,7 @@ import { Post } from "../types";
 
 interface Context {
   posts: Post[];
-  removeItemFromPost: (postId: number, itemId: number) => void;
+  removeItemFromPost: (itemId: number) => void;
   darkModeOn: boolean;
   setDarkModeOn: Dispatch<boolean>;
   createPost: (
@@ -33,7 +33,7 @@ interface Context {
 }
 const PostsContext = createContext<Context>({
   posts: [],
-  removeItemFromPost: (postId, itemId) => {},
+  removeItemFromPost: (itemId) => {},
   darkModeOn: true,
   setDarkModeOn: (state) => {},
   createPost: (lat, lng, callback) => {},
@@ -46,6 +46,7 @@ const URL = "http://localhost:5000";
 
 const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
   const [posts, setPosts] = useState([]);
+  const [selectedPost, setSelectedPost] = useState<Post | undefined>(undefined);
 
   const loadPosts = useCallback((callback?: (data: Post[]) => void) => {
     // setLoading(true);
@@ -66,19 +67,24 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
     loadPosts();
   }, [loadPosts]);
 
-  const removeItemFromPost = useCallback((postId: number, itemId: number) => {
-    console.log(selectedPost);
-    axios
-      .delete(`${URL}/${itemId}/deleteItem`)
-      .then((data) => {
-        console.log(`Deleted item ${itemId} successfully!`, data);
-        loadPosts((data) => {
-          const updatedSelectedPost = data.find((x) => x.post_id === postId);
-          setSelectedPost(updatedSelectedPost);
-        });
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  const removeItemFromPost = useCallback(
+    (itemId: number) => {
+      console.log(selectedPost);
+      axios
+        .delete(`${URL}/${itemId}/deleteItem`)
+        .then((data) => {
+          console.log(`Deleted item ${itemId} successfully!`, data);
+          loadPosts((data) => {
+            const updatedSelectedPost = data.find(
+              (x) => x.post_id === selectedPost?.post_id
+            );
+            setSelectedPost(updatedSelectedPost);
+          });
+        })
+        .catch((err) => console.log(err));
+    },
+    [loadPosts, selectedPost]
+  );
 
   const createPost = useCallback(
     (lat: number, lng: number, callback: (data: Post) => void) => {
@@ -113,7 +119,6 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
     },
     [loadPosts]
   );
-  const [selectedPost, setSelectedPost] = useState<Post | undefined>(undefined);
 
   const [darkModeOn, setDarkModeOn] = useState(true);
 
