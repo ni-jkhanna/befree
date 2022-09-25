@@ -42,7 +42,7 @@ const PostsContext = createContext<Context>({
   setSelectedPost: (post) => {},
 });
 
-const URL = "http://localhost:5000";
+const URL = "http://127.0.0.1:5000";
 
 const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
   const [posts, setPosts] = useState([]);
