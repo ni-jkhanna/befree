@@ -4,7 +4,7 @@ import { Item } from "../../types";
 import { usePosts } from "../../contexts/PostsContext";
 
 const PostItem = ({ item }: { item: Item }) => {
-  const { removeItemFromPost, selectedPost } = usePosts();
+  const { removeItemFromPost } = usePosts();
   return (
     <Stack
       direction={"row"}

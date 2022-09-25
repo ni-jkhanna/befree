@@ -10,6 +10,7 @@ import {
 } from "react";
 import axios from "axios";
 import { Post } from "../types";
+import SearchBar from "./../components/SearchBar/SearchBar";
 
 interface Context {
   posts: Post[];
@@ -30,6 +31,8 @@ interface Context {
   ) => void;
   selectedPost: Post | undefined;
   setSelectedPost: Dispatch<Post | undefined>;
+  searchText: string;
+  setSearchText: Dispatch<string>;
 }
 const PostsContext = createContext<Context>({
   posts: [],
@@ -40,6 +43,8 @@ const PostsContext = createContext<Context>({
   addItemToPost: (postId, item) => {},
   selectedPost: undefined,
   setSelectedPost: (post) => {},
+  searchText: "",
+  setSearchText: (searchText) => {},
 });
 
 const URL = "http://localhost:5000";
@@ -47,25 +52,43 @@ const URL = "http://localhost:5000";
 const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState<Post | undefined>(undefined);
+  const [searchText, setSearchText] = useState("");
 
-  const loadPosts = useCallback((callback?: (data: Post[]) => void) => {
-    // setLoading(true);
-    axios
-      .get(`${URL}/getAllPosts`)
-      .then((res) => {
-        // setLoading(false);
-        setPosts(res.data);
-        callback && callback(res.data);
-      })
-      .catch((err) => {
-        // setLoading(false);
-        console.log(err);
-      });
-  }, []);
+  const loadPosts = useCallback(
+    (callback?: (data: Post[]) => void) => {
+      // setLoading(true);
+      if (searchText.trim() === "") {
+        axios
+          .get(`${URL}/getAllPosts`)
+          .then((res) => {
+            // setLoading(false);
+            setPosts(res.data);
+            callback && callback(res.data);
+          })
+          .catch((err) => {
+            // setLoading(false);
+            console.log(err);
+          });
+      } else {
+        axios
+          .get(`${URL}/search?query=${searchText}`)
+          .then((res) => {
+            // setLoading(false);
+            setPosts(res.data);
+            callback && callback(res.data);
+          })
+          .catch((err) => {
+            // setLoading(false);
+            console.log(err);
+          });
+      }
+    },
+    [searchText]
+  );
 
   useEffect(() => {
     loadPosts();
-  }, [loadPosts]);
+  }, [loadPosts, searchText]);
 
   const removeItemFromPost = useCallback(
     (itemId: number) => {
@@ -132,6 +155,8 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
       addItemToPost,
       selectedPost,
       setSelectedPost,
+      searchText,
+      setSearchText,
     }),
     [
       addItemToPost,
@@ -139,6 +164,7 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
       darkModeOn,
       posts,
       removeItemFromPost,
+      searchText,
       selectedPost,
     ]
   );

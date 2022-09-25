@@ -10,7 +10,7 @@ const sx = {
   right: "140px",
   top: "40px",
   ".post-item:nth-child(even)": {
-    "background-color": theme.palette.divider,
+    "backgroundColor": theme.palette.divider,
   },
 };
 

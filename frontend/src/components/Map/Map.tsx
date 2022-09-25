@@ -17,7 +17,8 @@ const center = {
 };
 
 const Map = () => {
-  const { posts, darkModeOn, createPost, setSelectedPost } = usePosts();
+  const { posts, darkModeOn, createPost, setSelectedPost, setSearchText } =
+    usePosts();
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyAgKHxqZNOWnkknLpfP_k5GjsxTB88lrUY",
@@ -43,6 +44,7 @@ const Map = () => {
 
   const handleClick = useCallback(
     (lat: number, lng: number) => {
+      setSearchText("");
       createPost(lat, lng, (data) => {
         setSelectedPost(data);
       });
