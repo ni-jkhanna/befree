@@ -13,7 +13,6 @@ import { Post } from "../types";
 
 interface Context {
   posts: Post[];
-  loading: boolean;
   removeItemFromPost: (postId: number, itemId: number) => void;
   darkModeOn: boolean;
   setDarkModeOn: Dispatch<boolean>;
@@ -34,7 +33,6 @@ interface Context {
 }
 const PostsContext = createContext<Context>({
   posts: [],
-  loading: false,
   removeItemFromPost: (postId, itemId) => {},
   darkModeOn: true,
   setDarkModeOn: (state) => {},
@@ -48,7 +46,6 @@ const URL = "http://localhost:5000";
 
 const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const loadPosts = useCallback((callback?: (data: Post[]) => void) => {
     // setLoading(true);
@@ -123,7 +120,6 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
   const value = useMemo(
     () => ({
       posts,
-      loading,
       removeItemFromPost,
       darkModeOn,
       setDarkModeOn,
@@ -136,7 +132,6 @@ const PostsProvider = ({ children }: PropsWithChildren<{}>) => {
       addItemToPost,
       createPost,
       darkModeOn,
-      loading,
       posts,
       removeItemFromPost,
       selectedPost,

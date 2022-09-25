@@ -4,11 +4,11 @@ import Map from "../components/Map/Map";
 import PostContainer from "../components/Post/PostContainer";
 
 const MainPage = () => {
-  const { loading, selectedPost } = usePosts();
+  const { selectedPost } = usePosts();
 
   return (
     <Stack spacing={2}>
-      {loading ? "Loading posts..." : <Map />}
+      <Map />
       {selectedPost && (
         <PostContainer post={selectedPost} coordinates={undefined} />
       )}
